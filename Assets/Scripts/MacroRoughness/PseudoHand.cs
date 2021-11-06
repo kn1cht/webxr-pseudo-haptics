@@ -1,34 +1,35 @@
 using UnityEngine;
 
-namespace WebXRPseudo.Friction {
+namespace WebXRPseudo.MacroRoughness {
     public class PseudoHand : MonoBehaviour
     {
+        public Transform fingerTip;
         public Transform pseudoHandModel;
-        public SkinnedMeshRenderer trueHandRenderer;
+        private SkinnedMeshRenderer trueHandRenderer;
         private bool isTouching;
-        private float magnification;
+        private float curveZ;
+        private float maxdepth;
         private MeshRenderer pseudoHandRenderer;
-        private Vector3 originPosition;
 
 
         void Start()
         {
-            this.originPosition = this.transform.position;
             this.trueHandRenderer = this.GetComponent<SkinnedMeshRenderer>();
             this.trueHandRenderer.enabled = true;
             this.pseudoHandRenderer = this.pseudoHandModel.gameObject.GetComponent<MeshRenderer>();
             this.pseudoHandRenderer.enabled = false;
         }
 
-        public void TriggerTouch(bool isTouching, float magnification = 0f)
+        public void TriggerTouch(bool isTouching, float curveZ = 0f, float maxdepth = 1f)
         {
             this.isTouching = isTouching;
             if(isTouching)
             {
-                this.magnification = magnification;
+                this.curveZ = curveZ;
+                this.maxdepth = maxdepth;
                 this.pseudoHandModel.position = this.transform.position;
                 this.pseudoHandModel.rotation = this.transform.rotation;
-                this.originPosition = this.transform.position;
+                this.pseudoHandModel.localScale = Vector3.one;
                 this.trueHandRenderer.enabled = false;
                 this.pseudoHandRenderer.enabled = true;
             }
@@ -45,7 +46,17 @@ namespace WebXRPseudo.Friction {
             if(!this.isTouching)
                 return;
             this.pseudoHandModel.rotation = this.transform.rotation;
-            this.pseudoHandModel.position = originPosition + (this.transform.position - originPosition) * this.magnification;
+            RaycastHit hit;
+            Vector3 currentPos = this.transform.position;
+            if(Physics.Raycast(currentPos, Vector3.forward, out hit, 5.0f))
+            {
+                float z = hit.point.z + this.pseudoHandModel.position.z - this.fingerTip.position.z;
+                this.pseudoHandModel.position = new Vector3(currentPos.x, currentPos.y, z);
+                float depthRate = (hit.point.z - this.curveZ) / this.maxdepth;
+                Debug.Log(depthRate);
+                float scale = 1 - Mathf.Sin(depthRate * Mathf.PI / 2f) / 4f;
+                this.pseudoHandModel.localScale = Vector3.one * scale;
+            }
         }
     }
 }
