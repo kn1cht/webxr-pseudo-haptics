@@ -1,15 +1,15 @@
 using UnityEngine;
 
-namespace WebXRPseudo.MacroRoughness {
+namespace WebXRPseudo.FineRoughness {
     public class PseudoHand : MonoBehaviour
     {
         public Transform fingerTip;
         public Transform pseudoHandModel;
         private SkinnedMeshRenderer trueHandRenderer;
         private bool isTouching;
-        private float curveZ;
-        private float maxdepth;
+        private float roughnessLevel;
         private MeshRenderer pseudoHandRenderer;
+        private Vector3 lastPos;
 
 
         void Start()
@@ -20,16 +20,16 @@ namespace WebXRPseudo.MacroRoughness {
             this.pseudoHandRenderer.enabled = false;
         }
 
-        public void TriggerTouch(bool isTouching, float curveZ = 0f, float maxdepth = 1f)
+        public void TriggerTouch(bool isTouching, float roughnessLevel = 0f)
         {
             this.isTouching = isTouching;
             if(isTouching)
             {
-                this.curveZ = curveZ;
-                this.maxdepth = maxdepth;
                 this.pseudoHandModel.position = this.transform.position;
                 this.pseudoHandModel.rotation = this.transform.rotation;
                 this.pseudoHandModel.localScale = Vector3.one;
+                this.lastPos = this.transform.position;
+                this.roughnessLevel = roughnessLevel;
                 this.trueHandRenderer.enabled = false;
                 this.pseudoHandRenderer.enabled = true;
             }
@@ -41,6 +41,11 @@ namespace WebXRPseudo.MacroRoughness {
             }
         }
 
+        float perturber(float alpha, float velocity)
+        {
+            return alpha * Random.Range(-1f, 1f) * velocity / 20f;
+        }
+
         void Update()
         {
             if(!this.isTouching)
@@ -50,12 +55,13 @@ namespace WebXRPseudo.MacroRoughness {
             Vector3 currentPos = this.transform.position;
             if(Physics.Raycast(currentPos, Vector3.forward, out hit, 5.0f))
             {
+                float velocity = Mathf.Min(((this.transform.position - this.lastPos) / Time.deltaTime).magnitude, 0.3f);
+                float x = currentPos.x + this.perturber(this.roughnessLevel, velocity);
+                float y = currentPos.y + this.perturber(this.roughnessLevel, velocity);
                 float z = hit.point.z + this.pseudoHandModel.position.z - this.fingerTip.position.z;
-                this.pseudoHandModel.position = new Vector3(currentPos.x, currentPos.y, z);
-                float depthRate = (hit.point.z - this.curveZ) / this.maxdepth;
-                float scale = 1 - Mathf.Sin(depthRate * Mathf.PI / 2f) / 4f;
-                this.pseudoHandModel.localScale = Vector3.one * scale;
+                this.pseudoHandModel.position = new Vector3(x, y, z);
             }
+            this.lastPos = this.transform.position;
         }
     }
 }
