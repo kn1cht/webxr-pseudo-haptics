@@ -813,7 +813,6 @@ GameObject:
   m_Component:
   - component: {fileID: 638489034}
   - component: {fileID: 638489037}
-  - component: {fileID: 638489036}
   - component: {fileID: 638489035}
   m_Layer: 0
   m_Name: text
@@ -933,14 +932,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 638489037}
   m_maskType: 0
---- !u!222 &638489036
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 638489033}
-  m_CullTransparentMesh: 0
 --- !u!23 &638489037
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1666,7 +1657,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1486989463}
   - component: {fileID: 1486989466}
-  - component: {fileID: 1486989465}
   - component: {fileID: 1486989464}
   m_Layer: 0
   m_Name: text
@@ -1786,14 +1776,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 1486989466}
   m_maskType: 0
---- !u!222 &1486989465
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1486989462}
-  m_CullTransparentMesh: 0
 --- !u!23 &1486989466
 MeshRenderer:
   m_ObjectHideFlags: 0
