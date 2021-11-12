@@ -21,21 +21,6 @@ namespace WebXRPseudo.Weight {
             pseudoCube.GrabEnd();
             Cursor.visible = true;
         }
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.tag != "Hand")
-                return;
-            pseudoCube.GrabStart();
-            other.gameObject.GetComponent<PseudoHand>().TriggerTouch(true, pseudoCube.transform);
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.gameObject.tag != "Hand")
-                return;
-            pseudoCube.GrabEnd();
-            other.gameObject.GetComponent<PseudoHand>().TriggerTouch(false);
-        }
 
         void Update()
         {

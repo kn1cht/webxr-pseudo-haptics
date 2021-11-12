@@ -4,7 +4,7 @@
 namespace WebXRPseudo.Compliance {
     public class PseudoCube : MonoBehaviour
     {
-        public Transform cylinderContainer;
+        public LineRenderer line;
         public Transform trueCube;
         public float magnification = 0.2f;
         public float originDistance;
@@ -47,16 +47,20 @@ namespace WebXRPseudo.Compliance {
         void Update()
         {
             this.transform.rotation = Quaternion.Euler(Vector3.zero);
+            Vector3[] linePos = new Vector3[2];
+            this.line.GetPositions(linePos);
             if(this.isGrabbed)
             {
                 float y = this.originPosition.y + (this.trueCube.position.y - this.originPosition.y) * this.magnification * (this.isMouse? 0.7f : 1f);
                 this.transform.position = new Vector3(this.originPosition.x, y, this.originPosition.z);
-                this.cylinderContainer.localScale = new Vector3(1f, 1f + (this.transform.position.y - this.originPosition.y) / this.originDistance, 1f);
-                Debug.Log(this.cylinderContainer.localScale);
+                linePos[1].y = this.transform.position.y;
             }
             else
+            {
                 this.transform.position = this.trueCube.position;
-                this.cylinderContainer.localScale = new Vector3(1f, 1f + (this.trueCube.position.y - this.originPosition.y) / this.originDistance, 1f);
+                linePos[1].y = this.trueCube.position.y;
+            }
+            this.line.SetPositions(linePos);
         }
     }
 }
