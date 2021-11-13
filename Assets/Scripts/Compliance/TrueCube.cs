@@ -5,6 +5,7 @@ namespace WebXRPseudo.Compliance {
     public class TrueCube : MonoBehaviour
     {
         public PseudoCube pseudoCube;
+        public PseudoCursor pseudoCursor;
 
         void Start()
         {
@@ -13,13 +14,13 @@ namespace WebXRPseudo.Compliance {
         void OnMouseDown()
         {
             pseudoCube.GrabStart(true);
-            Cursor.visible = false;
+            pseudoCursor.TriggerTouch(true, pseudoCube);
         }
 
         void OnMouseUp()
         {
             pseudoCube.GrabEnd();
-            Cursor.visible = true;
+            pseudoCursor.TriggerTouch(false);
         }
 
         void Update()
