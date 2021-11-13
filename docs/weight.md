@@ -7,7 +7,9 @@ This is an illusion of weight. Grab the boxs and try to move it.
 
 重さの錯覚です。箱を持って動かしてみてください。
 
-<iframe id="unity-iframe" src="../demos/PseudoHapticWeight/index.html" width="960" height="700" scrolling="no" frameborder="0" style="-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-ms-transform-origin:0 0;"></iframe>
+<div id="unity-wrapper">
+    <iframe id="unity-iframe" src="../demos/PseudoHapticWeight/index.html" width="960" height="700" scrolling="no" frameborder="0" style="-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-ms-transform-origin:0 0;"></iframe>
+</div>
 
 ## References
 - L. Dominjon, A. Lecuyer, J.-M. Burkhardt, P. Richard, and S. Richir, "[Influence of control/display ratio on the perception of mass of manipulated objects in virtual environments](https://ieeexplore.ieee.org/abstract/document/1492749)," In Proceedings of IEEE Virtual Reality, pp. 19–25, 2005. DOI: 10.1109/VR.2005.1492749.

@@ -249,13 +249,21 @@ a.sidebar-nav-item:focus {
   color: #8f5536;
 }
 
-.video-box {
-  width:100%;
-  margin: 10px;
+#unity-wrapper {
+  position: relative;
+  width: 100%;
 }
 
-@media (min-width: 68em) {
-  .video-box {
-    width:45%;
-  }
+#unity-wrapper:before {
+  content:"";
+  display: block;
+  padding-top: 62.5%;
+}
+
+#unity-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }

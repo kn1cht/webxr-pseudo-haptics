@@ -2,6 +2,7 @@
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | webxr-pseudo-haptics</title>
     <meta name="description" content="">
@@ -10,7 +11,7 @@
   </head>
   <body>
     <div id="unity-container">
-      <div id="unity-canvas-container">
+      <div id="unity-canvas-container" style="width: 100%; height: 100%;">
         <canvas id="unity-canvas" style="width: 100%; height: 100%;"></canvas>
       </div>
       <div id="unity-loading-bar">
@@ -48,8 +49,7 @@
       var unityInstance = null;
       
 
-      canvasContainer.style.width = "960px";
-      canvasContainer.style.height = "600px";
+
       loadingBar.style.display = "block";
 
       var script = document.createElement("script");
