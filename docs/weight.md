@@ -8,7 +8,7 @@ This is an illusion of weight. Grab the boxs and try to move it.
 重さの錯覚です。箱を持って動かしてみてください。
 
 <div id="unity-wrapper">
-    <iframe id="unity-iframe" src="../demos/PseudoHapticWeight/index.html" width="960" height="700" scrolling="no" frameborder="0" style="-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-ms-transform-origin:0 0;"></iframe>
+    <iframe id="unity-iframe" src="../demos/PseudoHapticWeight/index.html" width="100%" height="100%" scrolling="no" frameborder="0" style="-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-ms-transform-origin:0 0;"></iframe>
 </div>
 
 ## References

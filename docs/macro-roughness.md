@@ -8,7 +8,7 @@ This is an illusion of macro roughness. Try moving your hand or the cursor in th
 マクロな粗さの錯覚です。手やカーソルを透明の箱の中で動かしてみてください。
 
 <div id="unity-wrapper">
-    <iframe id="unity-iframe" src="../demos/PseudoHapticMacroRoughness/index.html" width="960" height="700" scrolling="no" frameborder="0" style="-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-ms-transform-origin:0 0;"></iframe>
+    <iframe id="unity-iframe" src="../demos/PseudoHapticMacroRoughness/index.html" width="100%" height="100%" scrolling="no" frameborder="0" style="-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-ms-transform-origin:0 0;"></iframe>
 </div>
 
 ## References
