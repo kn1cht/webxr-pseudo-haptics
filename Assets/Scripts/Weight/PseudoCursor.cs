@@ -13,7 +13,7 @@ namespace WebXRPseudo.Weight {
 
         void Start()
         {
-            Cursor.SetCursor(handCursor, Vector2.zero, CursorMode.ForceSoftware);
+            Cursor.SetCursor(handCursor, new Vector2(32f, 32f), CursorMode.ForceSoftware);
             this.pseudoHandImage.enabled = false;
         }
         public void TriggerTouch(bool isTouching, PseudoCube pseudoCube=null)
@@ -32,7 +32,7 @@ namespace WebXRPseudo.Weight {
         {
             if(!this.isTouching) return;
             Vector3 pseudoCubePos = Camera.main.WorldToScreenPoint(this.pseudoCube.transform.position);
-            (pseudoHandImage.gameObject.transform as RectTransform).position = pseudoCubePos + this.handOffSet;
+            (this.pseudoHandImage.gameObject.transform as RectTransform).position = pseudoCubePos + this.handOffSet;
         }
     }
 }

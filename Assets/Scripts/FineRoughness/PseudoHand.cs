@@ -41,11 +41,6 @@ namespace WebXRPseudo.FineRoughness {
             }
         }
 
-        float perturber(float alpha, float velocity)
-        {
-            return alpha * Random.Range(-1f, 1f) * velocity / 20f;
-        }
-
         void Update()
         {
             if(!this.isTouching)
@@ -53,11 +48,13 @@ namespace WebXRPseudo.FineRoughness {
             this.pseudoHandModel.rotation = this.transform.rotation;
             RaycastHit hit;
             Vector3 currentPos = this.transform.position;
-            if(Physics.Raycast(currentPos, Vector3.forward, out hit, 5.0f))
+            int layerMask = 1 << 3;
+            layerMask = ~layerMask;
+            if(Physics.Raycast(currentPos, Vector3.forward, out hit, 5.0f, layerMask))
             {
                 float velocity = Mathf.Min(((this.transform.position - this.lastPos) / Time.deltaTime).magnitude, 0.3f);
-                float x = currentPos.x + this.perturber(this.roughnessLevel, velocity);
-                float y = currentPos.y + this.perturber(this.roughnessLevel, velocity);
+                float x = currentPos.x + Perturber.perturber(this.roughnessLevel, velocity);
+                float y = currentPos.y + Perturber.perturber(this.roughnessLevel, velocity);
                 float z = hit.point.z + this.pseudoHandModel.position.z - this.fingerTip.position.z;
                 this.pseudoHandModel.position = new Vector3(x, y, z);
             }

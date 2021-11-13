@@ -1,25 +1,23 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace WebXRPseudo.FineRoughness {
     public class PseudoCursor : MonoBehaviour
     {
         public Texture2D handCursor;
+        public Image pseudoHandImage;
         private bool isTouching;
         private bool isTouchingPre;
-        private float magnification;
-        private Vector3 originPosition;
-        private Transform pseudoCursor;
-        private SpriteRenderer pseudoCursorRenderer;
+        private float roughnessLevel;
+        private MovingAverage movingAverage;
         private PseudoZone pseudoZone;
-
+        private Vector3 lastPos;
 
         void Start()
         {
-            Cursor.SetCursor(handCursor, Vector2.zero, CursorMode.ForceSoftware);
-            this.originPosition = Input.mousePosition;
-            this.pseudoCursor = this.GetComponentInChildren<Transform>();
-            this.pseudoCursorRenderer = this.pseudoCursor.GetComponentInChildren<SpriteRenderer>();
-            this.pseudoCursorRenderer.enabled = false;
+            Cursor.SetCursor(handCursor, new Vector2(32f, 32f), CursorMode.ForceSoftware);
+            this.movingAverage = new MovingAverage();
+            this.pseudoHandImage.enabled = false;
         }
 
         public void TriggerTouch(bool isTouching, PseudoZone zone = null)
@@ -28,45 +26,43 @@ namespace WebXRPseudo.FineRoughness {
             if(isTouching && !this.isTouchingPre)
             {
                 Cursor.visible = false;
-                this.pseudoCursorRenderer.enabled = true;
+                this.pseudoHandImage.enabled = true;
                 this.pseudoZone = zone;
-                this.magnification = 1f;
-                this.pseudoCursor.position = MousePos2WorldPos(Input.mousePosition);
-                this.originPosition = MousePos2WorldPos(Input.mousePosition);
+                this.lastPos = Input.mousePosition;
+                (this.pseudoHandImage.gameObject.transform as RectTransform).position = Input.mousePosition;
+                this.roughnessLevel = zone.roughnessLevel;
             }
             else if(!isTouching && isTouchingPre)
             {
                 Cursor.visible = true;
-                this.pseudoCursorRenderer.enabled = false;
+                this.pseudoHandImage.enabled = false;
             }
             this.isTouchingPre = this.isTouching;
         }
 
-        private Vector3 MousePos2WorldPos(Vector3 mousePos) {
-            mousePos.z = Camera.main.nearClipPlane + 0.5f;
-            return Camera.main.ScreenToWorldPoint(mousePos);
-        }
-
         void Update()
         {
-            Cursor.SetCursor(handCursor, Vector2.zero, CursorMode.ForceSoftware);
-            if(this.isTouching)
-            {
-                this.pseudoCursor.position = originPosition + (MousePos2WorldPos(Input.mousePosition) - originPosition) * this.magnification;
+            Cursor.SetCursor(handCursor, new Vector2(32f, 32f), CursorMode.ForceSoftware);
+            if(!this.isTouching) return;
 
-                // judge if pseudo-cursor exits from pseudo-haptics zone
-                Vector3 pseudoScreenPos = Camera.main.WorldToScreenPoint(this.pseudoCursor.position);
-                Ray pseudoRay = Camera.main.ScreenPointToRay(pseudoScreenPos);
-                RaycastHit hit;
-                if (Physics.Raycast(pseudoRay, out hit)) {
-                    Transform objectHit = hit.transform;
-                    if(hit.transform.gameObject.name != this.pseudoZone.gameObject.name)
-                        this.TriggerTouch(false);
-                }
-                else {
+            float velocity = movingAverage.average(Mathf.Min(((Input.mousePosition - this.lastPos) / Time.deltaTime).magnitude, 500f));
+            float x = Input.mousePosition.x + Perturber.perturber(this.roughnessLevel, velocity, 0.025f);
+            float y = Input.mousePosition.y + Perturber.perturber(this.roughnessLevel, velocity, 0.025f);
+            (this.pseudoHandImage.gameObject.transform as RectTransform).position = new Vector2(x, y);
+
+            // judge if pseudo-cursor exits from pseudo-haptics zone
+            Vector3 pseudoScreenPos = (this.pseudoHandImage.gameObject.transform as RectTransform).position;
+            Ray pseudoRay = Camera.main.ScreenPointToRay(pseudoScreenPos);
+            RaycastHit hit;
+            if (Physics.Raycast(pseudoRay, out hit)) {
+                Transform objectHit = hit.transform;
+                if(hit.transform.gameObject.name != this.pseudoZone.gameObject.name)
                     this.TriggerTouch(false);
-                }
             }
+            else {
+                this.TriggerTouch(false);
+            }
+            this.lastPos = Input.mousePosition;
         }
     }
 }

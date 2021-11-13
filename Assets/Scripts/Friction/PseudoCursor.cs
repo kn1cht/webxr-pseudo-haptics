@@ -1,25 +1,22 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace WebXRPseudo.Friction {
     public class PseudoCursor : MonoBehaviour
     {
         public Texture2D handCursor;
+        public Image pseudoHandImage;
         private bool isTouching;
         private bool isTouchingPre;
         private float magnification;
         private Vector3 originPosition;
-        private Transform pseudoCursor;
-        private SpriteRenderer pseudoCursorRenderer;
         private PseudoZone pseudoZone;
-
 
         void Start()
         {
-            Cursor.SetCursor(handCursor, Vector2.zero, CursorMode.ForceSoftware);
+            Cursor.SetCursor(handCursor, new Vector2(32f, 32f), CursorMode.ForceSoftware);
             this.originPosition = Input.mousePosition;
-            this.pseudoCursor = this.GetComponentInChildren<Transform>();
-            this.pseudoCursorRenderer = this.pseudoCursor.GetComponentInChildren<SpriteRenderer>();
-            this.pseudoCursorRenderer.enabled = false;
+            this.pseudoHandImage.enabled = false;
         }
 
         public void TriggerTouch(bool isTouching, PseudoZone zone = null)
@@ -28,44 +25,38 @@ namespace WebXRPseudo.Friction {
             if(isTouching && !this.isTouchingPre)
             {
                 Cursor.visible = false;
-                this.pseudoCursorRenderer.enabled = true;
+                this.pseudoHandImage.enabled = true;
                 this.pseudoZone = zone;
                 this.magnification = zone.magnification;
-                this.pseudoCursor.position = MousePos2WorldPos(Input.mousePosition);
-                this.originPosition = MousePos2WorldPos(Input.mousePosition);
+                (this.pseudoHandImage.gameObject.transform as RectTransform).position = Input.mousePosition;
+                this.originPosition = Input.mousePosition;
             }
             else if(!isTouching && isTouchingPre)
             {
                 Cursor.visible = true;
-                this.pseudoCursorRenderer.enabled = false;
+                this.pseudoHandImage.enabled = false;
             }
             this.isTouchingPre = this.isTouching;
         }
 
-        private Vector3 MousePos2WorldPos(Vector3 mousePos) {
-            mousePos.z = Camera.main.nearClipPlane + 0.5f;
-            return Camera.main.ScreenToWorldPoint(mousePos);
-        }
-
         void Update()
         {
-            Cursor.SetCursor(handCursor, Vector2.zero, CursorMode.ForceSoftware);
-            if(this.isTouching)
-            {
-                this.pseudoCursor.position = originPosition + (MousePos2WorldPos(Input.mousePosition) - originPosition) * this.magnification;
+            Cursor.SetCursor(handCursor, new Vector2(32f, 32f), CursorMode.ForceSoftware);
+            if(!this.isTouching) return;
 
-                // judge if pseudo-cursor exits from pseudo-haptics zone
-                Vector3 pseudoScreenPos = Camera.main.WorldToScreenPoint(this.pseudoCursor.position);
-                Ray pseudoRay = Camera.main.ScreenPointToRay(pseudoScreenPos);
-                RaycastHit hit;
-                if (Physics.Raycast(pseudoRay, out hit)) {
-                    Transform objectHit = hit.transform;
-                    if(hit.transform.gameObject.name != this.pseudoZone.gameObject.name)
-                        this.TriggerTouch(false);
-                }
-                else {
+            (this.pseudoHandImage.gameObject.transform as RectTransform).position = originPosition + (Input.mousePosition - originPosition) * this.magnification;
+
+            // judge if pseudo-cursor exits from pseudo-haptics zone
+            Vector3 pseudoScreenPos = (this.pseudoHandImage.gameObject.transform as RectTransform).position;
+            Ray pseudoRay = Camera.main.ScreenPointToRay(pseudoScreenPos);
+            RaycastHit hit;
+            if (Physics.Raycast(pseudoRay, out hit)) {
+                Transform objectHit = hit.transform;
+                if(hit.transform.gameObject.name != this.pseudoZone.gameObject.name)
                     this.TriggerTouch(false);
-                }
+            }
+            else {
+                this.TriggerTouch(false);
             }
         }
     }
