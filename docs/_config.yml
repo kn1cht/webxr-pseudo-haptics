@@ -20,3 +20,5 @@ author:
 
 # Custom vars
 version:          0.9.0
+plugins:
+  - jekyll-target-blank
