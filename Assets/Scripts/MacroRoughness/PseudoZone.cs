@@ -11,13 +11,13 @@ namespace WebXRPseudo.MacroRoughness {
         void Start()
         {
             this.cursor = GameObject.Find("PseudoCursor").GetComponent<PseudoCursor>();
-            this.curve = this.transform.Find("half_cylinder");
+            this.curve = this.transform.Find("half_sphere");
             this.maxdepth = Mathf.Abs(this.curve.Find("maxdepth").position.z - this.curve.position.z);
         }
 
         void OnMouseOver()
         {
-            this.cursor.TriggerTouch(true, this);
+            this.cursor.TriggerTouch(true, this, this.curve.position.z, this.maxdepth);
         }
         private void OnTriggerEnter(Collider other)
         {

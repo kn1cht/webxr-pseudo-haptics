@@ -51,7 +51,6 @@ namespace WebXRPseudo.Friction {
             Ray pseudoRay = Camera.main.ScreenPointToRay(pseudoScreenPos);
             RaycastHit hit;
             if (Physics.Raycast(pseudoRay, out hit)) {
-                Transform objectHit = hit.transform;
                 if(hit.transform.gameObject.name != this.pseudoZone.gameObject.name)
                     this.TriggerTouch(false);
             }

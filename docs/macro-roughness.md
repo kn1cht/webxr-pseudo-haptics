@@ -3,9 +3,9 @@ layout: page
 title: Pseudo-haptic Macro Roughness
 ---
 
-This is an illusion of macro roughness. Try moving your hand or the cursor in the transparent boxes.
+This is an illusion of macro roughness. Try moving your hand or the cursor over the surface of the half spheres.
 
-マクロな粗さの錯覚です。手やカーソルを透明の箱の中で動かしてみてください。
+マクロな粗さの錯覚です。手やカーソルを半球の表面で動かしてみてください。
 
 <div id="unity-wrapper">
     <iframe id="unity-iframe" src="../demos/PseudoHapticMacroRoughness/index.html" width="100%" height="100%" scrolling="no" frameborder="0" style="-webkit-transform-origin:0 0;-moz-transform-origin:0 0;-ms-transform-origin:0 0;"></iframe>

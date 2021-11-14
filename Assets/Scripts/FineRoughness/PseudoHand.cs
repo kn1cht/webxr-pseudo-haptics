@@ -48,7 +48,7 @@ namespace WebXRPseudo.FineRoughness {
             this.pseudoHandModel.rotation = this.transform.rotation;
             RaycastHit hit;
             Vector3 currentPos = this.transform.position;
-            int layerMask = 1 << 3;
+            int layerMask = 1 << 2 | 1 << 3;
             layerMask = ~layerMask;
             if(Physics.Raycast(currentPos, Vector3.forward, out hit, 5.0f, layerMask))
             {
