@@ -1,0 +1,29 @@
+name: GitHub Pages
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: jekyll/jekyll:pages
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: bundle install
+        run: |
+          bundle install
+        working-directory: ./docs
+      - name: Jekyll Build
+        run: bundle exec jekyll build
+        working-directory: ./docs
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_site
