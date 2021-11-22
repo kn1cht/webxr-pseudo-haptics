@@ -9,14 +9,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container:
-      image: jekyll/jekyll:pages
+      image: alpinelab/ruby-dev
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - uses: actions/checkout@v2
+      - name: Jekyll install
+        run: gem install jekyll
       - name: bundle install
-        run: |
-          bundle install
+        run: bundle install
         working-directory: ./docs
       - name: Jekyll Build
         run: bundle exec jekyll build
