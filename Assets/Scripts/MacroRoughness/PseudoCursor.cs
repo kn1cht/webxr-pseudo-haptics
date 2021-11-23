@@ -1,21 +1,26 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using WebXR;
 
 namespace WebXRPseudo.MacroRoughness {
     public class PseudoCursor : MonoBehaviour
     {
         public Texture2D handCursor;
         public Image pseudoHandImage;
+        private bool isCursorHidden = true;
         private bool isTouching;
         private bool isTouchingPre;
         private float curveZ;
         private float maxdepth;
         private PseudoZone pseudoZone;
+        private WebXRManager webXRManager;
 
         void Start()
         {
             Cursor.SetCursor(handCursor, new Vector2(32f, 32f), CursorMode.ForceSoftware);
             this.pseudoHandImage.enabled = false;
+            this.webXRManager = GameObject.Find("WebXRCameraSet").GetComponent<WebXRManager>();
         }
 
         public void TriggerTouch(bool isTouching, PseudoZone zone = null, float curveZ = 0f, float maxdepth = 1f)
@@ -23,7 +28,7 @@ namespace WebXRPseudo.MacroRoughness {
             this.isTouching = isTouching;
             if(isTouching && !this.isTouchingPre)
             {
-                Cursor.visible = false;
+                this.isCursorHidden = true;
                 this.curveZ = curveZ;
                 this.maxdepth = maxdepth;
                 this.pseudoHandImage.enabled = true;
@@ -33,7 +38,7 @@ namespace WebXRPseudo.MacroRoughness {
             }
             else if(!isTouching && isTouchingPre)
             {
-                Cursor.visible = true;
+                this.isCursorHidden = false;
                 this.pseudoHandImage.enabled = false;
                 (this.pseudoHandImage.gameObject.transform as RectTransform).localScale = Vector3.one;
             }
@@ -43,6 +48,14 @@ namespace WebXRPseudo.MacroRoughness {
         void Update()
         {
             Cursor.SetCursor(handCursor, new Vector2(32f, 32f), CursorMode.ForceSoftware);
+            try
+            {
+                Cursor.visible = !(isCursorHidden || webXRManager.XRState == WebXRState.VR); // disable cursor in VR mode
+            }
+            catch
+            {
+                Cursor.visible = !isCursorHidden;
+            }
             if(!this.isTouching) return;
 
             Vector3 currentPos = Input.mousePosition;

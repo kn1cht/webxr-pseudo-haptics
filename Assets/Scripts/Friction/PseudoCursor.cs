@@ -1,22 +1,27 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using WebXR;
 
 namespace WebXRPseudo.Friction {
     public class PseudoCursor : MonoBehaviour
     {
         public Texture2D handCursor;
         public Image pseudoHandImage;
+        private bool isCursorHidden = true;
         private bool isTouching;
         private bool isTouchingPre;
         private float magnification;
         private Vector3 originPosition;
         private PseudoZone pseudoZone;
+        private WebXRManager webXRManager;
 
         void Start()
         {
             Cursor.SetCursor(handCursor, new Vector2(32f, 32f), CursorMode.ForceSoftware);
             this.originPosition = Input.mousePosition;
             this.pseudoHandImage.enabled = false;
+            this.webXRManager = GameObject.Find("WebXRCameraSet").GetComponent<WebXRManager>();
         }
 
         public void TriggerTouch(bool isTouching, PseudoZone zone = null)
@@ -24,7 +29,7 @@ namespace WebXRPseudo.Friction {
             this.isTouching = isTouching;
             if(isTouching && !this.isTouchingPre)
             {
-                Cursor.visible = false;
+                this.isCursorHidden = true;
                 this.pseudoHandImage.enabled = true;
                 this.pseudoZone = zone;
                 this.magnification = zone.magnification;
@@ -33,7 +38,7 @@ namespace WebXRPseudo.Friction {
             }
             else if(!isTouching && isTouchingPre)
             {
-                Cursor.visible = true;
+                this.isCursorHidden = false;
                 this.pseudoHandImage.enabled = false;
             }
             this.isTouchingPre = this.isTouching;
@@ -42,6 +47,15 @@ namespace WebXRPseudo.Friction {
         void Update()
         {
             Cursor.SetCursor(handCursor, new Vector2(32f, 32f), CursorMode.ForceSoftware);
+            Cursor.SetCursor(handCursor, new Vector2(32f, 32f), CursorMode.ForceSoftware);
+            try
+            {
+                Cursor.visible = !(isCursorHidden || webXRManager.XRState == WebXRState.VR); // disable cursor in VR mode
+            }
+            catch
+            {
+                Cursor.visible = !isCursorHidden;
+            }
             if(!this.isTouching) return;
 
             (this.pseudoHandImage.gameObject.transform as RectTransform).position = originPosition + (Input.mousePosition - originPosition) * this.magnification;
