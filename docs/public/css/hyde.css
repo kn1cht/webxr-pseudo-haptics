@@ -67,6 +67,7 @@ html {
     bottom: 0;
     width: 18rem;
     text-align: left;
+    overflow-y: auto;
   }
 }
 
@@ -247,6 +248,10 @@ a.sidebar-nav-item:focus {
 .theme-base-0f .content a,
 .theme-base-0f .related-posts li a:hover {
   color: #8f5536;
+}
+
+.section {
+  scrollbar-width: thin;
 }
 
 #unity-wrapper {
