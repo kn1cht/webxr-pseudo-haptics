@@ -36,12 +36,12 @@ html {
 }
 @media (min-width: 48em) {
   html {
-    font-size: 16px;
+    font-size: 15px;
   }
 }
 @media (min-width: 58em) {
   html {
-    font-size: 20px;
+    font-size: 18px;
   }
 }
 
@@ -276,4 +276,25 @@ a.sidebar-nav-item:focus {
   left: 0;
   bottom: 0;
   right: 0;
+}
+
+.flex-container {
+  display: flex;
+  justify-content:space-between;
+  flex-wrap: wrap;
+}
+.flex-container .col {
+  width: 50%;
+  flex-basis: calc(50% - 20px);
+  max-width: calc(50% - 20px);
+}
+
+@media screen and (max-width: 1012px) {
+  .flex-container {
+    display: block;
+  }
+  .flex-container .col {
+    width: 100%;
+    max-width: 100%;
+  }
 }

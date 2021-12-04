@@ -5,7 +5,9 @@ title: Home
 
 # WebXR Pseudo-haptics
 
-Demonstraions of pseudo-haptics using [WebXR](https://immersiveweb.dev/).
+Demonstraions of pseudo-haptics using [WebXR](https://immersiveweb.dev/). What is pseudo-haptics and how to play this? See [About]({{site.baseurl}}/about) page.
+
+[WebXR](https://immersiveweb.dev/)を使用したPseudo-hapticsのデモです。Pseudo-hapticsとは何かや、操作方法については[About]({{site.baseurl}}/about)をご覧ください。
 
 ## 紹介ビデオ（日本語）
 <div style="position: relative;width: 100%;padding-top: 56.25%;">
