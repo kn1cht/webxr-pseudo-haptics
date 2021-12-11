@@ -38,7 +38,7 @@ namespace WebXRPseudo.Weight {
         {
             this.transform.rotation = this.trueCube.rotation;
             if(this.isGrabbed)
-                this.transform.position = this.originPosition + (this.trueCube.position - this.originPosition) * this.magnification * (this.isMouse? 0.5f : 1f);
+                this.transform.position = this.originPosition + (this.trueCube.position - this.originPosition) * this.magnification * (this.isMouse? this.magnification : 1f);
             else
                 this.transform.position = this.trueCube.position;
         }
